@@ -1,10 +1,12 @@
 import sys
 
 import pygame
+import pygame.freetype
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from hud import write_text
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
@@ -34,6 +36,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
+        write_text(screen, "testing", "white")
         updatable.update(dt)
         for asteroid in asteroids:
             if asteroid.collides_with(player):
@@ -44,7 +47,7 @@ def main():
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
                     shot.kill()
-                    asteroid.kill()
+                    asteroid.split()
         for obj in drawable:
             obj.draw(screen)
         pygame.display.flip()
