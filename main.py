@@ -5,8 +5,8 @@ import pygame.freetype
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from hud import write_text
+from constants import DEFAULT_FONT, SCREEN_HEIGHT, SCREEN_WIDTH
+
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
@@ -36,8 +36,16 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
-        write_text(screen, "testing", "white")
         updatable.update(dt)
+        try:
+            DEFAULT_FONT.render_to(
+                screen,
+                (20, 20),
+                "This is a test of the emergency broadcast HUD",
+                "white",
+            )
+        except AttributeError:
+            print(DEFAULT_FONT)
         for asteroid in asteroids:
             if asteroid.collides_with(player):
                 log_event("player_hit")
