@@ -1,3 +1,4 @@
+import os
 import sys
 
 import pygame
@@ -6,7 +7,6 @@ import pygame.freetype
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import DEFAULT_FONT, SCREEN_HEIGHT, SCREEN_WIDTH
-
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
@@ -15,7 +15,9 @@ from shot import Shot
 def main():
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH} \nScreen height: {SCREEN_HEIGHT}")
+    os.environ["SDL_VIDEODRIVER"] = "wayland"
     pygame.init()
+    # flags = pygame.RESIZABLE
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0

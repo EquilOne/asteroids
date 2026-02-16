@@ -1,3 +1,5 @@
+import tkinter as tk
+
 import pygame
 import pygame.freetype
 
@@ -19,8 +21,10 @@ class LazyFont:
         return self
 
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+root = tk.Tk()
+SCREEN_WIDTH = root.winfo_screenwidth()
+SCREEN_HEIGHT = root.winfo_screenheight()
+root.destroy()
 PLAYER_RADIUS = 20
 LINE_WIDTH = 2
 PLAYER_TURN_SPEED = 300
