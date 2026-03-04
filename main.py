@@ -6,19 +6,23 @@ import pygame.freetype
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import DEFAULT_FONT, SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import DEFAULT_FONT
+from hud import HUDElement
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
 
+PADDING = 20
+
 
 def main():
     print(f"Starting Asteroids with pygame version {pygame.version.ver}")
-    print(f"Screen width: {SCREEN_WIDTH} \nScreen height: {SCREEN_HEIGHT}")
     os.environ["SDL_VIDEODRIVER"] = "wayland"
     pygame.init()
     # flags = pygame.RESIZABLE
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    screen_rect = screen.get_rect()
+    print(f"Screen width: {screen_rect.right} \nScreen height: {screen_rect.bottom}")
     clock = pygame.time.Clock()
     dt = 0
     asteroids = pygame.sprite.Group()
@@ -29,8 +33,10 @@ def main():
     AsteroidField.containers = updatable
     Shot.containers = (drawable, shots, updatable)
     Player.containers = (updatable, drawable)
+    HUDElement.containers = (drawable, updatable)
     asteroid_field = AsteroidField()
-    player = Player(x=SCREEN_WIDTH / 2, y=SCREEN_HEIGHT / 2)
+    player = Player(x=screen_rect.centerx, y=screen_rect.centery)
+    # score = HUDElement()
 
     while True:
         log_state()
@@ -39,15 +45,9 @@ def main():
                 return
         screen.fill("black")
         updatable.update(dt)
-        try:
-            DEFAULT_FONT.render_to(
-                screen,
-                (20, 20),
-                "This is a test of the emergency broadcast HUD",
-                "white",
-            )
-        except AttributeError:
-            print(DEFAULT_FONT)
+        text_surface, text_rect = DEFAULT_FONT.render("Score: 0", "white")
+        text_rect.topright = (screen_rect.right - PADDING, screen_rect.top + PADDING)
+        screen.blit(text_surface, text_rect)
         for asteroid in asteroids:
             if asteroid.collides_with(player):
                 log_event("player_hit")
