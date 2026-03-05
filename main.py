@@ -46,7 +46,10 @@ def main():
         screen.fill("black")
         updatable.update(dt)
         text_surface, text_rect = DEFAULT_FONT.render("Score: 0", "white")
-        text_rect.topright = (screen_rect.right - PADDING, screen_rect.top + PADDING)
+        text_rect.topright = (
+            screen_rect.right - HUDElement.PADDING,
+            screen_rect.top + HUDElement.PADDING,
+        )
         screen.blit(text_surface, text_rect)
         for asteroid in asteroids:
             if asteroid.collides_with(player):

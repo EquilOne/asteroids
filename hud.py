@@ -12,3 +12,10 @@ class HUDElement(pygame.sprite.Sprite):
     def __init__(self, position, font=default_font):
         self.font = font
         self.color = "#FFFFFF"
+
+
+class Score(HUDElement):
+    SCORE = 0
+
+    def __init__(self):
+        pass
