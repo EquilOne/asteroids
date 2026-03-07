@@ -2,17 +2,16 @@ import os
 import sys
 
 import pygame
-import pygame.freetype
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import DEFAULT_FONT
+from constants import DEFAULT_FONT, LazyDimensions
 from hud import HUDElement
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
 
-PADDING = 20
+screen = None
 
 
 def main():
@@ -22,7 +21,9 @@ def main():
     # flags = pygame.RESIZABLE
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     screen_rect = screen.get_rect()
-    print(f"Screen width: {screen_rect.right} \nScreen height: {screen_rect.bottom}")
+    screen_width = LazyDimensions().get_width()
+    screen_height = LazyDimensions().get_height()
+    print(f"Screen width: {screen_width} \nScreen height: {screen_height}")
     clock = pygame.time.Clock()
     dt = 0
     asteroids = pygame.sprite.Group()
@@ -56,6 +57,8 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+            if asteroid.collides_with(asteroid):
+                asteroid.split()
             for shot in shots:
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
