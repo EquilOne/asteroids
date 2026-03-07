@@ -5,13 +5,10 @@ import pygame
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import DEFAULT_FONT, LazyDimensions
-from hud import HUDElement
+from hud import HUDElement, Score
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
-
-screen = None
 
 
 def main():
@@ -21,8 +18,9 @@ def main():
     # flags = pygame.RESIZABLE
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     screen_rect = screen.get_rect()
-    screen_width = LazyDimensions().get_width()
-    screen_height = LazyDimensions().get_height()
+    screen_width, screen_height = screen_rect.bottomright
+    # screen_width = LazyDimensions().get_width()
+    # screen_height = LazyDimensions().get_height()
     print(f"Screen width: {screen_width} \nScreen height: {screen_height}")
     clock = pygame.time.Clock()
     dt = 0
@@ -37,7 +35,7 @@ def main():
     HUDElement.containers = (drawable, updatable)
     asteroid_field = AsteroidField()
     player = Player(x=screen_rect.centerx, y=screen_rect.centery)
-    # score = HUDElement()
+    score = Score(screen_rect)
 
     while True:
         log_state()
@@ -46,28 +44,20 @@ def main():
                 return
         screen.fill("black")
         updatable.update(dt)
-        text_surface, text_rect = DEFAULT_FONT.render("Score: 0", "white")
-        text_rect.topright = (
-            screen_rect.right - HUDElement.PADDING,
-            screen_rect.top + HUDElement.PADDING,
-        )
-        screen.blit(text_surface, text_rect)
         for asteroid in asteroids:
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
-            if asteroid.collides_with(asteroid):
-                asteroid.split()
             for shot in shots:
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
+                    score.score += 10
                     shot.kill()
                     asteroid.split()
         for obj in drawable:
             obj.draw(screen)
         pygame.display.flip()
-        clock.tick(60)
         dt = clock.tick(60) / 1000
 
 
