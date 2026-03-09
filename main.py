@@ -5,7 +5,7 @@ import pygame
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from hud import HUDElement, Score
+from hud import Counters, HUDElement, Score
 from logger import log_event, log_state
 from player import Player
 from shot import Shot
@@ -36,6 +36,7 @@ def main():
     asteroid_field = AsteroidField()
     player = Player(x=screen_rect.centerx, y=screen_rect.centery)
     score = Score(screen_rect)
+    counters = Counters(screen_rect)
 
     while True:
         log_state()
@@ -45,16 +46,21 @@ def main():
         screen.fill("black")
         updatable.update(dt)
         for asteroid in asteroids:
-            if asteroid.collides_with(player):
+            if not player.invulnerable and asteroid.collides_with(player):
                 log_event("player_hit")
+                counters.lives -= 1
+                asteroid.split()
+            if counters.lives <= 0:
                 print("Game over!")
                 sys.exit()
             for shot in shots:
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
-                    score.score += 10
+                    score.score += 5
                     shot.kill()
                     asteroid.split()
+                    if asteroid.asteroid_destroyed:
+                        score.score += 5
         for obj in drawable:
             obj.draw(screen)
         pygame.display.flip()

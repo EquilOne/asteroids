@@ -18,6 +18,8 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_cooldown = 0
+        self.invulnerable_cooldown = 0
+        self.invulnerable = False
 
     # in the Player class
     def triangle(self):
@@ -54,6 +56,8 @@ class Player(CircleShape):
     def update(self, dt):
         keys = pygame.key.get_pressed()
 
+        if self.invulnerable:
+            self.is_invulnerable(dt)
         self.shot_cooldown -= dt
         if keys[pygame.K_a]:
             self.rotate(-dt)

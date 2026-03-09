@@ -48,3 +48,13 @@ class Score(HUDElement):
 
     def update(self, dt):
         self.text = f"Score: {self.score}"
+
+
+class Counters(HUDElement):
+    def __init__(self, screen_rect):
+        super().__init__(screen_rect, anchor="bottomleft")
+        self.lives = 3
+        # self.ammo = weapon.max_ammo
+
+    def update(self, dt):
+        self.text = f"Lives: {self.lives}"

@@ -15,8 +15,10 @@ class Asteroid(CircleShape):
         pygame.draw.circle(screen, "white", self.position, self.radius, LINE_WIDTH)
 
     def split(self):
+        self.asteroid_destroyed = False
         self.kill()
         if self.radius <= ASTEROID_MIN_RADIUS:
+            self.asteroid_destroyed = True
             return
         log_event("asteroid_split")
         random_angle = random.uniform(20, 50)
