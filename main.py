@@ -47,6 +47,7 @@ def main():
         updatable.update(dt)
         for asteroid in asteroids:
             if not player.invulnerable and asteroid.collides_with(player):
+                player.make_invulnerable()
                 log_event("player_hit")
                 counters.lives -= 1
                 asteroid.split()
