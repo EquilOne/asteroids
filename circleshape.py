@@ -28,11 +28,15 @@ class CircleShape(pygame.sprite.Sprite):
 
     def collides_with(self, other):
         if self.position.distance_to(other.position) < (self.radius + other.radius):
-            self.invulnerable = True
-            other.invulnerable = True
-            other.set_invulnerable_cooldown()
+           # self.invulnerable = True
+           # other.invulnerable = True
+           # other.set_invulnerable_cooldown()
             return True
         return False
+
+    def make_invulnerable(self, timer=DEFAULT_COOLDOWN):
+        self.invulnerable = True
+        self.invulnerable_cooldown = timer
 
     def is_invulnerable(self, dt):
         if self.invulnerable_cooldown <= 0:
@@ -40,5 +44,5 @@ class CircleShape(pygame.sprite.Sprite):
         else:
             self.invulnerable_cooldown -= dt
 
-    def set_invulnerable_cooldown(self):
-        self.invulnerable_cooldown = DEFAULT_COOLDOWN
+   # def set_invulnerable_cooldown(self):
+       # self.invulnerable_cooldown = DEFAULT_COOLDOWN
