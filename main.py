@@ -52,8 +52,8 @@ def main():
                 counters.lives -= 1
                 asteroid.split()
                 if counters.lives <= 0:
-                print("Game over!")
-                sys.exit()
+                    print("Game over!")
+                    sys.exit()
             for shot in shots:
                 if shot.collides_with(asteroid):
                     log_event("asteroid_shot")
